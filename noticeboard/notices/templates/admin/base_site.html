@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | Digital Notice Board Admin{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">Digital Notice Board Admin</a></h1>
+{% endblock %}
+
+{% block extrastyle %}
+    <style>
+        :root {
+            --primary: #d0e7ff; /* Light blue */
+            --secondary: #6c757d; /* Soft gray */
+        }
+        #header {
+            background-color: #e6f0fa; /* Very light blue */
+            color: #343a40;
+            border-bottom: 2px solid #d0e7ff;
+        }
+        #site-name a {
+            color: #343a40;
+            text-decoration: none;
+        }
+        #site-name a:hover {
+            color: #6c757d;
+        }
+        .module h2, .module caption, .inline-group h2 {
+            background-color: #e6f0fa;
+            color: #343a40;
+            border-radius: 5px;
+        }
+        .button, input[type=submit], input[type=button], .submit-row input, a.button {
+            background-color: #d0e7ff;
+            border-color: #d0e7ff;
+            color: #343a40;
+        }
+        .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
+            background-color: #b3d4ff;
+            border-color: #b3d4ff;
+        }
+        body {
+            background-color: #f9fbfd; /* Very light off-white */
+        }
+        .paginator .this-page, .paginator a {
+            color: #343a40;
+        }
+        .paginator a:hover {
+            background-color: #e6f0fa;
+        }
+    </style>
+{% endblock %}
