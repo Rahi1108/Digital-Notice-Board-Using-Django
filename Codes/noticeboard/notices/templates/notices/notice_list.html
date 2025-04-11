@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Notice Board</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f9fbfd; /* Very light off-white */
+            color: #343a40; /* Darker gray for primary text */
+            font-family: 'Arial', sans-serif;
+        }
+        .header {
+            background-color: #e6f0fa; /* Very light blue */
+            color: #343a40;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #d0e7ff; /* Light blue border */
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        .login-section {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .login-section .btn {
+            background-color: #d0e7ff; /* Light blue button */
+            border-color: #d0e7ff;
+            color: #343a40;
+        }
+        .login-section .btn:hover {
+            background-color: #b3d4ff; /* Slightly darker on hover */
+            border-color: #b3d4ff;
+        }
+        .search-form {
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .search-form .form-control {
+            border-color: #d0e7ff;
+            background-color: #ffffff;
+        }
+        .search-form .btn {
+            background-color: #d0e7ff;
+            border-color: #d0e7ff;
+            color: #343a40;
+        }
+        .search-form .btn:hover {
+            background-color: #b3d4ff;
+            border-color: #b3d4ff;
+        }
+        .notice-card {
+            background-color: #ffffff; /* White card */
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Very soft shadow */
+            transition: transform 0.2s;
+        }
+        .notice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .notice-card img {
+            max-height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .notice-card .card-body {
+            padding: 20px;
+        }
+        .notice-card .card-title a {
+            color: #343a40;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .notice-card .card-title a:hover {
+            color: #6c757d;
+        }
+        .notice-card .card-text {
+            color: #6c757d; /* Soft gray for secondary text */
+        }
+        .notice-card .btn {
+            background-color: #d0e7ff;
+            border-color: #d0e7ff;
+            color: #343a40;
+        }
+        .notice-card .btn:hover {
+            background-color: #b3d4ff;
+            border-color: #b3d4ff;
+        }
+        .no-notices {
+            text-align: center;
+            color: #6c757d;
+            font-size: 1.2rem;
+            margin-top: 50px;
+        }
+        .pagination {
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .pagination .page-link {
+            color: #343a40;
+            border-color: #d0e7ff;
+            background-color: #ffffff;
+        }
+        .pagination .page-link:hover {
+            background-color: #e6f0fa;
+            border-color: #d0e7ff;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #d0e7ff;
+            border-color: #d0e7ff;
+            color: #343a40;
+        }
+        footer {
+            background-color: #e9ecef; /* Light gray footer */
+            color: #6c757d;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 50px;
+            border-top: 2px solid #d0e7ff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Digital Notice Board</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Admin Login Section -->
+        <div class="login-section">
+            <a href="{% url 'admin:index' %}" class="btn">Admin Login</a>
+        </div>
+
+        <!-- Search Form -->
+        <form class="search-form" method="get" action="{% url 'notice_list' %}">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search notices..." value="{{ query }}">
+                <button type="submit" class="btn">Search</button>
+            </div>
+        </form>
+
+        <!-- Notices List -->
+        {% if page_obj %}
+            <div class="row">
+                {% for notice in page_obj %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card notice-card">
+                            {% if notice.image %}
+                                <img src="{{ notice.image.url }}" class="card-img-top" alt="{{ notice.title }} Image">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{% url 'notice_detail' notice.id %}">{{ notice.title }}</a>
+                                </h5>
+                                <p class="card-text">{{ notice.description|truncatewords:20 }}</p>
+                                <p class="card-text"><small><strong>Category:</strong> {{ notice.category.name }}</small></p>
+                                <p class="card-text"><small><strong>Posted on:</strong> {{ notice.date_posted }}</small></p>
+                                {% if notice.document %}
+                                    <a href="{{ notice.document.url }}" target="_blank" class="btn btn-sm">View Document</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}">Last &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% else %}
+            <p class="no-notices">No notices available at the moment.</p>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Digital Notice Board. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
