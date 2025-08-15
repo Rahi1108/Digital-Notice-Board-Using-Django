@@ -1,10 +1,3 @@
-
-Digital Notice Board Using Django
-Digital Notice Board Using Django
-Mar 2025 - PresentMar 2025 - Present
-Charotar University of Science & Technology (CHARUSAT) logo
-Associated with Charotar University of Science & Technology (CHARUSAT)
-Associated with Charotar University of Science & Technology (CHARUSAT)
 The Digital Notice Board is a web-based application developed using the Django framework, designed to provide a simple and efficient way to display notices on a local system. Unlike traditional notice boards that rely on physical paper and pins, this digital solution allows notices to be created, managed, and viewed seamlessly through a web interface. The project is specifically tailored to run on a single Windows PC, making it ideal for small-scale, localized use cases such as a personal workspace, classroom, or small office.
 Key Features:
 1. Admin-Controlled Notice Creation
